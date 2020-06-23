@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizLibApp", "WizLibApp\WizLibApp.csproj", "{3B4C5544-6F7A-484F-B963-E7FCE9659520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizLib_DataAccess", "WizLib_DataAccess\WizLib_DataAccess.csproj", "{FE84A06D-D0D9-4C67-A583-AED4B7932D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizLib_Models", "WizLib_Models\WizLib_Models.csproj", "{29CF335A-AAC6-4831-A835-A478EBEC66E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B4C5544-6F7A-484F-B963-E7FCE9659520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B4C5544-6F7A-484F-B963-E7FCE9659520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B4C5544-6F7A-484F-B963-E7FCE9659520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B4C5544-6F7A-484F-B963-E7FCE9659520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE84A06D-D0D9-4C67-A583-AED4B7932D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE84A06D-D0D9-4C67-A583-AED4B7932D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE84A06D-D0D9-4C67-A583-AED4B7932D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE84A06D-D0D9-4C67-A583-AED4B7932D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29CF335A-AAC6-4831-A835-A478EBEC66E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29CF335A-AAC6-4831-A835-A478EBEC66E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29CF335A-AAC6-4831-A835-A478EBEC66E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29CF335A-AAC6-4831-A835-A478EBEC66E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
