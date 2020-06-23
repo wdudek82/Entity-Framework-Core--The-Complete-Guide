@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WizLib_Models.Models;
 
 namespace WizLib_DataAccess
 {
@@ -7,5 +8,7 @@ namespace WizLib_DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
+        public DbSet<Category> Categories { get; set; }
     }
 }
