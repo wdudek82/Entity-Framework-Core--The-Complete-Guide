@@ -11,5 +11,6 @@ namespace WizLib_DataAccess
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Genre> Gengres { get; set; }
+        public DbSet<Book> Books { get; set; }
     }
 }
