@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WizLib_Models.Models
@@ -12,5 +13,7 @@ namespace WizLib_Models.Models
 
         [Required]
         public string Location { get; set; }
+
+        public List<Book> Books { get; set; }
     }
 }

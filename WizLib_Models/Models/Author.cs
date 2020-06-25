@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +9,6 @@ namespace WizLib_Models.Models
     public class Author
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Author_Id { get; set; }
 
         [Required]
@@ -21,5 +22,7 @@ namespace WizLib_Models.Models
 
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
+
+        public ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }

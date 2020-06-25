@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WizLib_Models.Models
 {
     public class Category
     {
-        public int Id { get; set; }
+        [Key]
+        public int Category_Id { get; set; }
         public string Name { get; set; }
     }
 }

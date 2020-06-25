@@ -52,6 +52,9 @@ namespace WizLib_DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("BookDetail_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("ISBN")
                         .IsRequired()
                         .HasColumnType("nvarchar(15)")
@@ -60,28 +63,57 @@ namespace WizLib_DataAccess.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("Publisher_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Book_Id");
 
+                    b.HasIndex("BookDetail_Id")
+                        .IsUnique();
+
+                    b.HasIndex("Publisher_Id");
+
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("WizLib_Models.Models.Category", b =>
+            modelBuilder.Entity("WizLib_Models.Models.BookAuthor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Author_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Book_Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Author_Id", "Book_Id");
+
+                    b.HasIndex("Book_Id");
+
+                    b.ToTable("BookAuthors");
+                });
+
+            modelBuilder.Entity("WizLib_Models.Models.BookDetail", b =>
+                {
+                    b.Property<int>("BookDetail_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NumberOfChapters")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("NumberOfPages")
+                        .HasColumnType("int");
 
-                    b.ToTable("Categories");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("BookDetail_Id");
+
+                    b.ToTable("BookDetail");
                 });
 
             modelBuilder.Entity("WizLib_Models.Models.Genre", b =>
@@ -118,6 +150,36 @@ namespace WizLib_DataAccess.Migrations
                     b.HasKey("Publisher_Id");
 
                     b.ToTable("Publishers");
+                });
+
+            modelBuilder.Entity("WizLib_Models.Models.Book", b =>
+                {
+                    b.HasOne("WizLib_Models.Models.BookDetail", "BookDetail")
+                        .WithOne("Book")
+                        .HasForeignKey("WizLib_Models.Models.Book", "BookDetail_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WizLib_Models.Models.Publisher", "Publisher")
+                        .WithMany("Books")
+                        .HasForeignKey("Publisher_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WizLib_Models.Models.BookAuthor", b =>
+                {
+                    b.HasOne("WizLib_Models.Models.Author", "Author")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("Author_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WizLib_Models.Models.Book", "Book")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("Book_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
