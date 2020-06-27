@@ -49,7 +49,7 @@ namespace WizLib_DataAccess
             modelBuilder.Entity<FluentBookDetail>()
                 .Property(b => b.Weight);
 
-            // FLuentBook
+            // FluentBook
             modelBuilder.Entity<FluentBook>()
                 .HasKey(b => b.Book_Id);
             modelBuilder.Entity<FluentBook>()
@@ -62,6 +62,16 @@ namespace WizLib_DataAccess
             modelBuilder.Entity<FluentBook>()
                 .Property(b => b.Price)
                 .IsRequired();
+            modelBuilder.Entity<FluentBook>()
+                .HasOne(b => b.FluentBookDetail)
+                .WithOne(bd => bd.FluentBook)
+                // .HasForeignKey<FluentBook>("BookDetail_Id");
+                .HasForeignKey<FluentBook>(b => b.BookDetail_Id);
+            // one to many relation between book and publisher
+            modelBuilder.Entity<FluentBook>()
+                .HasOne(b => b.FluentPublisher)
+                .WithMany(p => p.FluentBooks)
+                .HasForeignKey(b => b.Publisher_Id);
 
             // FluentAuthor
             modelBuilder.Entity<FluentAuthor>()
@@ -88,6 +98,18 @@ namespace WizLib_DataAccess
             modelBuilder.Entity<FluentPublisher>()
                 .Property(p => p.Location)
                 .IsRequired();
+
+            // FluentBookAuthor - add many to many relation
+            modelBuilder.Entity<FluentBookAuthor>()
+                .HasKey(ba => new {ba.Author_Id, ba.Book_Id});
+            modelBuilder.Entity<FluentBookAuthor>()
+                .HasOne(ba => ba.FluentBook)
+                .WithMany(ba => ba.FluentBookAuthors)
+                .HasForeignKey(ba => ba.Book_Id);
+            modelBuilder.Entity<FluentBookAuthor>()
+                .HasOne(ba => ba.FluentAuthor)
+                .WithMany(ba => ba.FluentBookAuthors)
+                .HasForeignKey(ba => ba.Author_Id);
         }
     }
 }

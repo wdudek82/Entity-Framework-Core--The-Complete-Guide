@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WizLib_DataAccess;
 
 namespace WizLib_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200627215244_AddOnetToOneFluentBookAndFluentBookDetail")]
+    partial class AddOnetToOneFluentBookAndFluentBookDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,17 +90,9 @@ namespace WizLib_DataAccess.Migrations
                     b.Property<int>("Book_Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Author_Id1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Book_Id1")
-                        .HasColumnType("int");
-
                     b.HasKey("Author_Id", "Book_Id");
 
-                    b.HasIndex("Author_Id1");
-
-                    b.HasIndex("Book_Id1");
+                    b.HasIndex("Book_Id");
 
                     b.ToTable("BookAuthors");
                 });
@@ -184,9 +178,6 @@ namespace WizLib_DataAccess.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Publisher_Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -196,24 +187,7 @@ namespace WizLib_DataAccess.Migrations
                     b.HasIndex("BookDetail_Id")
                         .IsUnique();
 
-                    b.HasIndex("Publisher_Id");
-
                     b.ToTable("FluentBooks");
-                });
-
-            modelBuilder.Entity("WizLib_Models.Models.FluentBookAuthor", b =>
-                {
-                    b.Property<int>("Author_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Book_Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Author_Id", "Book_Id");
-
-                    b.HasIndex("Book_Id");
-
-                    b.ToTable("FluentBookAuthor");
                 });
 
             modelBuilder.Entity("WizLib_Models.Models.FluentBookDetail", b =>
@@ -310,13 +284,17 @@ namespace WizLib_DataAccess.Migrations
 
             modelBuilder.Entity("WizLib_Models.Models.BookAuthor", b =>
                 {
-                    b.HasOne("WizLib_Models.Models.Author", null)
+                    b.HasOne("WizLib_Models.Models.Author", "Author")
                         .WithMany("BookAuthors")
-                        .HasForeignKey("Author_Id1");
+                        .HasForeignKey("Author_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("WizLib_Models.Models.Book", null)
+                    b.HasOne("WizLib_Models.Models.Book", "Book")
                         .WithMany("BookAuthors")
-                        .HasForeignKey("Book_Id1");
+                        .HasForeignKey("Book_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WizLib_Models.Models.FluentBook", b =>
@@ -324,27 +302,6 @@ namespace WizLib_DataAccess.Migrations
                     b.HasOne("WizLib_Models.Models.FluentBookDetail", "FluentBookDetail")
                         .WithOne("FluentBook")
                         .HasForeignKey("WizLib_Models.Models.FluentBook", "BookDetail_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WizLib_Models.Models.FluentPublisher", "FluentPublisher")
-                        .WithMany("FluentBooks")
-                        .HasForeignKey("Publisher_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WizLib_Models.Models.FluentBookAuthor", b =>
-                {
-                    b.HasOne("WizLib_Models.Models.FluentAuthor", "FluentAuthor")
-                        .WithMany("FluentBookAuthors")
-                        .HasForeignKey("Author_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WizLib_Models.Models.FluentBook", "FluentBook")
-                        .WithMany("FluentBookAuthors")
-                        .HasForeignKey("Book_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

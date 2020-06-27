@@ -18,5 +18,7 @@ namespace WizLib_Models.Models
         public string Location { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
+        public ICollection<FluentBookAuthor> FluentBookAuthors { get; set; }
     }
 }
