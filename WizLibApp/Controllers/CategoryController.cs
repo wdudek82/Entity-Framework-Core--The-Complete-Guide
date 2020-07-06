@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WizLib_DataAccess;
 using WizLib_Models.Models;
@@ -78,22 +77,42 @@ namespace WizLibApp.Controllers
 
         public IActionResult CreateMultiple2()
         {
-            throw new System.NotImplementedException();
+            var categories = Enumerable.Range(1, 2)
+                .Select(i => new Category {Name = Guid.NewGuid().ToString()}).ToList();
+
+            _db.Categories.AddRange(categories);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult CreateMultiple5()
         {
-            throw new System.NotImplementedException();
+            var categories = Enumerable.Range(1, 5)
+                .Select(i => new Category {Name = Guid.NewGuid().ToString()}).ToList();
+
+            _db.Categories.AddRange(categories);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult RemoveMultiple2()
         {
-            throw new System.NotImplementedException();
+            var categories = _db.Categories.OrderByDescending(c => c.Category_Id).Take(2).ToList();
+            _db.RemoveRange(categories);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult RemoveMultiple5()
         {
-            throw new System.NotImplementedException();
+            var categories = _db.Categories.OrderByDescending(c => c.Category_Id).Take(5).ToList();
+            _db.RemoveRange(categories);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
