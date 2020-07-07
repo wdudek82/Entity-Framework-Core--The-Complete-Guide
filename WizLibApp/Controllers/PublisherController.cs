@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WizLib_Models.Models;
 
 namespace WizLibApp.Controllers
 {
@@ -9,5 +10,16 @@ namespace WizLibApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Publisher obj)
+        {
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
