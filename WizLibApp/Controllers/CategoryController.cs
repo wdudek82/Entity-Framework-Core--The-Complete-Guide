@@ -28,8 +28,6 @@ namespace WizLibApp.Controllers
                 ? new Category()
                 : _db.Categories.FirstOrDefault(c => c.Category_Id == id);
 
-            Console.WriteLine($"===> id: {id ?? 0}, category name: {category?.Name ?? "-"}");
-
             if (category == null)
             {
                 return NotFound();
@@ -42,8 +40,6 @@ namespace WizLibApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Category obj)
         {
-            Console.WriteLine($"===> id: {obj.Category_Id}, category name: {obj.Name ?? "-"}");
-
             if (ModelState.IsValid)
             {
                 if (obj.Category_Id == 0)

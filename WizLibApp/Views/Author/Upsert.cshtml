@@ -40,11 +40,11 @@
                 <div class="col-8">
                     @if (Model.Author_Id != 0)
                     {
-                        <input asp-for="BirthDate" placeholder="mm/dd/yyyy" id="datepicker_dob" type="text" class="form-control" />
+                        <input asp-for="BirthDate" placeholder="dd/mm/yyyy" id="datepicker_dob" type="text" class="form-control" />
                     }
                     else
                     {
-                        <input asp-for="BirthDate" value="" placeholder="mm/dd/yyyy" id="datepicker_dob" type="text" class="form-control" />
+                        <input asp-for="BirthDate" value="" placeholder="dd/mm/yyyy" id="datepicker_dob" type="text" class="form-control" />
                     }
                     <span asp-validation-for="BirthDate" class="text-danger"></span>
                 </div>
@@ -83,8 +83,8 @@
 
         $(function () {
             $("#datepicker_dob").datepicker({
-
-            });
+                dateFormat: 'dd-mm-yy'
+            }).val();
         });
 
     </script>
