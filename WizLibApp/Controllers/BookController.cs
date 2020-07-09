@@ -19,6 +19,12 @@ namespace WizLibApp.Controllers
         public IActionResult Index()
         {
             var books = _db.Books.ToList();
+            foreach (var book in books)
+            {
+                // book.Publisher = _db.Publishers.FirstOrDefault(b => b.Publisher_Id == book.Publisher_Id);
+                _db.Entry(book).Reference(b => b.Publisher).Load();
+            }
+
             return View(books);
         }
 
@@ -57,18 +63,18 @@ namespace WizLibApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(BookVM obj)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(obj);
-            }
+            // if (!ModelState.IsValid)
+            // {
+            //     return View(obj);
+            // }
 
-            if (obj.Book == null)
+            if (obj.Book.Book_Id == null)
             {
-                // _db.Books.Add(obj);
+                _db.Books.Add(obj.Book);
             }
             else
             {
-                // _db.Books.Update(obj);
+                _db.Books.Update(obj.Book);
             }
 
             _db.SaveChanges();
@@ -76,10 +82,49 @@ namespace WizLibApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int? id)
         {
-            return Ok();
+            BookVM obj = new BookVM();
+
+            if (id == null)
+            {
+                return View(obj);
+            }
+
+            // this is for edit
+            obj.Book = _db.Books.FirstOrDefault(b => b.Book_Id == id);
+            obj.Book!.BookDetail = _db.BookDetails.FirstOrDefault(b => b.BookDetail_Id == obj.Book.BookDetail_Id);
+
+            if (obj.Book == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Details(BookVM obj)
+        {
+            if (obj.Book.BookDetail.BookDetail_Id == 0)
+            {
+                _db.BookDetails.Add(obj.Book.BookDetail);
+
+                var bookFromDb = _db.Books.FirstOrDefault(b => b.Book_Id == obj.Book.Book_Id);
+                bookFromDb!.BookDetail_Id = obj.Book.BookDetail_Id;
+
+                _db.SaveChanges();
+            }
+            else
+            {
+                _db.BookDetails.Update(obj.Book.BookDetail);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult ManageAuthors()
         {
             return Ok();

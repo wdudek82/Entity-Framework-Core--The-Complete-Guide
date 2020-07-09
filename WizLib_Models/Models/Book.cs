@@ -23,7 +23,7 @@ namespace WizLib_Models.Models
         public string PriceRange { get; set; }
 
         [ForeignKey("BookDetail")]
-        public int BookDetail_Id { get; set; }
+        public int? BookDetail_Id { get; set; }
 
         public BookDetail BookDetail { get; set; }
 
