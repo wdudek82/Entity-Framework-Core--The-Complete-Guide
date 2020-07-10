@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WizLib_DataAccess;
-using WizLib_Models.Models;
 using WizLib_Models.ViewModels;
 
 namespace WizLibApp.Controllers
@@ -18,12 +18,17 @@ namespace WizLibApp.Controllers
 
         public IActionResult Index()
         {
-            var books = _db.Books.ToList();
-            foreach (var book in books)
-            {
-                // book.Publisher = _db.Publishers.FirstOrDefault(b => b.Publisher_Id == book.Publisher_Id);
-                _db.Entry(book).Reference(b => b.Publisher).Load();
-            }
+            var books = _db.Books
+                .Include(b => b.Publisher)
+                .ToList();
+            // foreach (var book in books)
+            // {
+            //     // Least efficient
+            //     // book.Publisher = _db.Publishers.FirstOrDefault(b => b.Publisher_Id == book.Publisher_Id);
+            //
+            //     // Explicit loading - more efficient
+            //     _db.Entry(book).Reference(b => b.Publisher).Load();
+            // }
 
             return View(books);
         }
@@ -68,7 +73,7 @@ namespace WizLibApp.Controllers
             //     return View(obj);
             // }
 
-            if (obj.Book.Book_Id == null)
+            if (obj.Book.Book_Id == 0)
             {
                 _db.Books.Add(obj.Book);
             }
@@ -92,8 +97,8 @@ namespace WizLibApp.Controllers
             }
 
             // this is for edit
-            obj.Book = _db.Books.FirstOrDefault(b => b.Book_Id == id);
-            obj.Book!.BookDetail = _db.BookDetails.FirstOrDefault(b => b.BookDetail_Id == obj.Book.BookDetail_Id);
+            obj.Book = _db.Books.Include(b => b.BookDetail).FirstOrDefault(b => b.Book_Id == id);
+            // obj.Book!.BookDetail = _db.BookDetails.FirstOrDefault(b => b.BookDetail_Id == obj.Book.BookDetail_Id);
 
             if (obj.Book == null)
             {
