@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WizLib_DataAccess;
+using WizLib_Models.Models;
 using WizLib_Models.ViewModels;
 
 namespace WizLibApp.Controllers
@@ -56,6 +58,27 @@ namespace WizLibApp.Controllers
             var bookCount1 = bookCollection2.Count();
 
             var bookCount2 = _db.Books.Count();
+
+            IEnumerable<Book> bookList1 = _db.Books;
+            var filteredBook1 = bookList1.Where(b => b.Price > 500).ToList();
+
+            IQueryable<Book> bookList2 = _db.Books;
+            var filteredBook2 = bookList2.Where(b => b.Price > 500).ToList();
+
+            // Updating related data
+            var bookTemp1 = _db.Books
+                .Include(b => b.BookDetail)
+                .FirstOrDefault(b => b.Book_Id == 2);
+            bookTemp1!.BookDetail.NumberOfChapters = 2222;
+            _db.Books.Update(bookTemp1);
+            _db.SaveChanges();
+
+            var bookTemp2 = _db.Books
+                .Include(b => b.BookDetail)
+                .FirstOrDefault(b => b.Book_Id == 2);
+            bookTemp2!.BookDetail.Weight = 3333;
+            _db.Books.Attach(bookTemp2);
+            _db.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
