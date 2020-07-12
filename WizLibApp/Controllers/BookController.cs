@@ -180,10 +180,6 @@ namespace WizLibApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult ManageAuthors()
-        {
-            return Ok();
-        }
 
         public IActionResult Delete(int id)
         {
@@ -196,6 +192,59 @@ namespace WizLibApp.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ManageAuthors(int id)
+        {
+            var obj = new BookAuthorVM
+            {
+                BookAuthorList = _db.BookAuthors
+                    .Include(u => u.Author)
+                    .Include(u => u.Book)
+                    .Where(u => u.Book_Id == id)
+                    .ToList(),
+                BookAuthor = new BookAuthor
+                {
+                    Book_Id = id
+                },
+                Book = _db.Books.FirstOrDefault(u => u.Book_Id == id)
+            };
+            var tempListOfAssignedAuthors = obj.BookAuthorList.Select(u => u.Author_Id).ToList();
+
+            // NOT IN clause in LINQ
+            // get all authors whose id is not in tempListOfAssignedAuthors
+            var tempList = _db.Authors.Where(u => !tempListOfAssignedAuthors.Contains(u.Author_Id)).ToList();
+            obj.AuthorList = tempList.Select(i => new SelectListItem
+            {
+                Text = i.FullName,
+                Value = i.Author_Id.ToString()
+            });
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult ManageAuthors(BookAuthorVM bookAuthorVm)
+        {
+            if (bookAuthorVm.BookAuthor.Book_Id != 0 && bookAuthorVm.BookAuthor.Author_Id != 0)
+            {
+                _db.BookAuthors.Add(bookAuthorVm.BookAuthor);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(ManageAuthors), new {id = bookAuthorVm.BookAuthor.Book_Id});
+        }
+
+        [HttpPost]
+        public IActionResult RemoveAuthors(int authorId, BookAuthorVM bookAuthorVm)
+        {
+            var bookId = bookAuthorVm.Book.Book_Id;
+            var bookAuthor = _db.BookAuthors
+                .FirstOrDefault(u => u.Author_Id == authorId && u.Book_Id == bookId);
+            _db.BookAuthors.Remove(bookAuthor);
+            _db.SaveChanges();
+
+            return RedirectToAction(nameof(ManageAuthors), new {id = bookId});
         }
     }
 }
