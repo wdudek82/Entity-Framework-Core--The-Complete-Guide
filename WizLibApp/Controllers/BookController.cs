@@ -20,17 +20,24 @@ namespace WizLibApp.Controllers
 
         public IActionResult Index()
         {
-            var books = _db.Books
-                .Include(b => b.Publisher)
-                .ToList();
-            // foreach (var book in books)
-            // {
-            //     // Least efficient
-            //     // book.Publisher = _db.Publishers.FirstOrDefault(b => b.Publisher_Id == book.Publisher_Id);
-            //
-            //     // Explicit loading - more efficient
-            //     _db.Entry(book).Reference(b => b.Publisher).Load();
-            // }
+            // var books = _db.Books
+            //     .Include(b => b.Publisher)
+            //     .ToList();
+            var books = _db.Books.ToList();
+            foreach (var book in books)
+            {
+                // Least efficient
+                // book.Publisher = _db.Publishers.FirstOrDefault(b => b.Publisher_Id == book.Publisher_Id);
+
+                // Explicit loading - more efficient
+                _db.Entry(book).Reference(b => b.Publisher).Load();
+                _db.Entry(book).Collection(b => b.BookAuthors).Load();
+
+                foreach (var bookAuthor in book.BookAuthors)
+                {
+                    _db.Entry(bookAuthor).Reference(u => u.Author).Load();
+                }
+            }
 
             return View(books);
         }
