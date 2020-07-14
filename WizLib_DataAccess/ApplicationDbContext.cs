@@ -15,6 +15,7 @@ namespace WizLib_DataAccess
         public DbSet<Book> Books { get; set; }
 
         public DbSet<BookDetail> BookDetails { get; set; }
+        public DbSet<BookDetailsFromView> BookDetailsFromViews { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<BookAuthor> BookAuthors { get; set; }
@@ -44,6 +45,10 @@ namespace WizLib_DataAccess
             modelBuilder.ApplyConfiguration(new FluentAuthorConfig());
             modelBuilder.ApplyConfiguration(new FluentBookAuthorConfig());
             modelBuilder.ApplyConfiguration(new FluentPublisherConfig());
+
+            modelBuilder.Entity<BookDetailsFromView>()
+                .HasNoKey()
+                .ToView("GetOnlyBookDetails");
         }
     }
 }

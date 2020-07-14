@@ -95,6 +95,18 @@ namespace WizLibApp.Controllers
             _db.Entry(category!).State = EntityState.Modified;
             _db.SaveChanges();
 
+            // Views
+            var viewList = _db.BookDetailsFromViews.ToList();
+            var viewList1 = _db.BookDetailsFromViews.FirstOrDefault();
+            var viewList2 = _db.BookDetailsFromViews.Where(u => u.Price > 500);
+
+            // Raw SQL
+            var bookRaw = _db.Books.FromSqlRaw("SELECT * FROM dbo.Books").ToList();
+
+            var id = 1;
+            var bookRaw1 = _db.Books.FromSqlInterpolated($"SELECT * FROM dbo.Books WHERE Book_Id={id}").ToList();
+
+
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WizLib_DataAccess;
 using WizLib_Models.Models;
 
@@ -18,7 +19,7 @@ namespace WizLibApp.Controllers
         // GET
         public IActionResult Index()
         {
-            var categories = _db.Categories.ToList();
+            var categories = _db.Categories.AsNoTracking().ToList();
             return View(categories);
         }
 
