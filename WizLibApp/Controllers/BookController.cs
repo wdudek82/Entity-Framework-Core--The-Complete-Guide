@@ -103,8 +103,10 @@ namespace WizLibApp.Controllers
             // Raw SQL
             var bookRaw = _db.Books.FromSqlRaw("SELECT * FROM dbo.Books").ToList();
 
-            var id = 1;
+            var id = 2;
             var bookRaw1 = _db.Books.FromSqlInterpolated($"SELECT * FROM dbo.Books WHERE Book_Id={id}").ToList();
+
+            var booksSproc = _db.Books.FromSqlInterpolated($"EXEC dbo.getAllBookDetails {id}").ToList();
 
 
             return RedirectToAction(nameof(Index));
